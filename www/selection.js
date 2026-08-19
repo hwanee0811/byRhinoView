@@ -112,10 +112,19 @@ export function onPointerDown(event) {
         addSelectionOutline(obj);
       }
     } else {
-      clearSelection();
-      S.selectedObjects.push(obj);
-      addSelectionOutline(obj);
-    }
+  clearSelection();
+  S.selectedObjects.push(obj);
+  addSelectionOutline(obj);
+
+  // 선택한 객체를 Orbit 회전 중심으로 설정
+  const box = new THREE.Box3().setFromObject(obj);
+
+  if (!box.isEmpty()) {
+    const center = box.getCenter(new THREE.Vector3());
+    S.controls.target.copy(center);
+    S.controls.update();
+  }
+}
   } else {
     clearSelection();
   }
